@@ -1,26 +1,200 @@
-/* 上部固定ヘッダー */
-header {
-    position: fixed;
-    /* スクロールしても固定 */
-    top: 0;
-    /* 画面上部に固定 */
-    left: 0;
-    width: 100%;
-    /* 横幅いっぱい */
-    background-color: #333;
-    /* 背景色 */
-    color: white;
-    /* 文字色 */
-    padding: 15px 30px;
-    /* 余白 */
-    font-size: 1.2rem;
-    z-index: 1000;
-    /* 他の要素より前面に */
+html {
+    font-size: 100%;
 }
 
-/* 本文との間隔を確保 */
+:root {
+    --header-height: 4rem;
+    --title-font-size: 2rem;
+    --default-font-size: 1rem;
+    --link-color: #ccc;
+    --link-hover-color: #009dff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: var(--default-font-size);
+    line-height: 1.6;
+}
+
+/* ヘッダー */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: var(--title-font-size);
+    z-index: 1000;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* ハンバーガーメニューボタン */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    gap: 5px;
+}
+
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ナビゲーション */
+nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* ドロップダウンメニュー用のアイテム */
+.nav-item {
+    position: relative;
+}
+
+nav a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--link-hover-color);
+}
+
+/* サブメニュー */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #444;
+    min-width: 150px;
+    padding: 0.5rem 0;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.submenu a {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--link-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.submenu a:hover {
+    background-color: #555;
+    color: var(--link-hover-color);
+}
+
+/* サブメニューが表示されている状態 */
+.nav-item.show-submenu .submenu {
+    display: block;
+    opacity: 1;
+}
+
+/* 見出し */
+h2 {
+    text-decoration: underline;
+    font-size: 2rem;
+}
+
+h3 {
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+/* メインコンテンツ */
 main {
-    margin-top: 80px;
-    /* ヘッダーの高さ分余白 */
-    padding: 20px;
+    margin-top: var(--header-height);
+    padding: 2rem;
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    nav {
+        position: fixed;
+        top: var(--header-height);
+        right: -100%;
+        width: 250px;
+        height: calc(100vh - var(--header-height));
+        background-color: #333;
+        flex-direction: column;
+        padding: 2rem;
+        transition: right 0.3s;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    nav.active {
+        right: 0;
+    }
+
+    nav a {
+        padding: 1rem;
+        border-bottom: 1px solid #555;
+        width: 100%;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    /* モバイルではクリックでサブメニューを表示 */
+    .submenu {
+        position: static;
+        display: none;
+        background-color: #555;
+        margin-top: 0;
+        margin-left: 1rem;
+        box-shadow: none;
+    }
+
+    .nav-item.active .submenu {
+        display: block;
+    }
+
+    header {
+        padding: 1rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
 }

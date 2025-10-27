@@ -9,31 +9,43 @@
 </head>
 
 <body>
-
     <header>
         <strong>My Portfolio</strong>
-        <a href="#about" style="color: #ccc; text-decoration: none;">About</a>
-        <a href="#works" style="color: #ccc; text-decoration: none;">Works</a>
-        <a href="#contact" style="color: #ccc; text-decoration: none;">Contact</a>
+        <button class="menu-toggle" aria-label="メニュー">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <div class="nav-item">
+                <a href="#about">About</a>
+                <div class="submenu">
+                    <a href="#profile">Profile</a>
+                    <a href="#skill">Skill</a>
+                    <a href="#education">Education</a>
+                </div>
+            </div>
+            <a href="#works">Works</a>
+            <a href="#contact">Contact</a>
+        </nav>
     </header>
-
     <main>
         <section id="about">
             <h2>About Me</h2>
-            <p>自己紹介文など。</p>
+            <p>大阪公立大学工業高等専門学校知能情報コースに在籍しています。</p>
+            <h3 id="skill">skill</h3>
         </section>
-
         <section id="works">
-            <h2>作品</h2>
+            <h2>Works</h2>
             <p>プロジェクト紹介など。</p>
         </section>
-
         <section id="contact">
-            <h2>お問い合わせ</h2>
+            <h2>Contact</h2>
             <p>連絡先など。</p>
         </section>
     </main>
 
+    <script src="script.js"></script>
 </body>
 
 </html>
