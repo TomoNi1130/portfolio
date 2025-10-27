@@ -1,0 +1,26 @@
+/* 上部固定ヘッダー */
+header {
+    position: fixed;
+    /* スクロールしても固定 */
+    top: 0;
+    /* 画面上部に固定 */
+    left: 0;
+    width: 100%;
+    /* 横幅いっぱい */
+    background-color: #333;
+    /* 背景色 */
+    color: white;
+    /* 文字色 */
+    padding: 15px 30px;
+    /* 余白 */
+    font-size: 1.2rem;
+    z-index: 1000;
+    /* 他の要素より前面に */
+}
+
+/* 本文との間隔を確保 */
+main {
+    margin-top: 80px;
+    /* ヘッダーの高さ分余白 */
+    padding: 20px;
+}
