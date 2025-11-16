@@ -411,7 +411,21 @@ img.jaga-icon {
 
     .work-item {
         flex-basis: 100%;
-        max-width: none;
-        min-width: auto;
+        max-width: 400px;
+        /* 最大幅を制限 */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .work-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto 0.5rem;
+        max-height: 250px;
+        /* 画像の高さも制限可能 */
+        object-fit: contain;
+        /* 必要に応じて画像の切り抜き防止 */
     }
 }
