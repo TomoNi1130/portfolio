@@ -48,41 +48,17 @@ aboutLink.addEventListener('click', (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     let currentTooltip = null;
-    let hideTimeout = null;
-    let currentItem = null;
 
     document.querySelectorAll(".skill-item").forEach(item => {
+        const link = item.querySelector('a');
+        let tooltipVisible = false;
 
-        const clearHideTimeout = () => {
-            if (hideTimeout) {
-                clearTimeout(hideTimeout);
-                hideTimeout = null;
-            }
-        };
-
-        const scheduleHideTooltip = () => {
-            clearHideTimeout();
-            hideTimeout = setTimeout(() => {
-                if (currentTooltip) {
-                    currentTooltip.classList.remove("show");
-                    setTimeout(() => {
-                        currentTooltip?.remove();
-                        currentTooltip = null;
-                        currentItem = null;
-                    }, 200);
-                }
-            }, 200); // 200ms後に消す
-        };
-
-        item.addEventListener("mouseenter", () => {
-            clearHideTimeout();
-
+        // ツールチップを表示する関数
+        function showTooltip() {
             if (currentTooltip) {
                 currentTooltip.remove();
                 currentTooltip = null;
             }
-
-            currentItem = item;
 
             const duration = item.dataset.duration || "";
             const description = item.dataset.description || "説明がありません。";
@@ -111,22 +87,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => tooltip.classList.add("show"), 10);
 
-            // ツールチップにマウスが入ったら消すタイマーをキャンセル
-            tooltip.addEventListener("mouseenter", () => {
-                clearHideTimeout();
-            });
-
-            // ツールチップからマウスが出たら消すタイマーをセット
-            tooltip.addEventListener("mouseleave", () => {
-                scheduleHideTooltip();
-            });
-
             currentTooltip = tooltip;
+            tooltipVisible = true;
+
+            // ツールチップ外クリックで閉じる処理
+            function onClickOutside(e) {
+                if (!item.contains(e.target) && !tooltip.contains(e.target)) {
+                    hideTooltip();
+                    document.removeEventListener('click', onClickOutside);
+                }
+            }
+            document.addEventListener('click', onClickOutside);
+        }
+
+        function hideTooltip() {
+            if (currentTooltip) {
+                currentTooltip.classList.remove("show");
+                setTimeout(() => {
+                    currentTooltip?.remove();
+                    currentTooltip = null;
+                    tooltipVisible = false;
+                }, 200);
+            }
+        }
+
+        // ワンクリックでツールチップ表示 or 非表示切り替え
+        item.addEventListener('click', (e) => {
+            e.preventDefault(); // リンクの遷移を止める
+            if (tooltipVisible) {
+                hideTooltip();
+            } else {
+                showTooltip();
+            }
         });
 
-        item.addEventListener("mouseleave", () => {
-            // マウスがツールチップに移動する可能性があるため少し遅延させて判定
-            scheduleHideTooltip();
+        // ダブルクリックでリンク遷移
+        item.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            // リンクのhrefに遷移
+            const href = link.getAttribute('href');
+            if (href) {
+                window.location.href = href;
+            }
         });
     });
 });
