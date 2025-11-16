@@ -390,3 +390,27 @@ section {
         padding: 1rem;
     }
 }
+
+.work-list {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.work-item {
+    flex: 1 1 calc((100% - 2rem) / 3);
+    /* 3つ並べる幅計算 (gap分2remを引く) */
+    max-width: 300px;
+    /* 最大幅は適宜調整 */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.work-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 0.5rem;
+}
