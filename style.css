@@ -8,7 +8,7 @@ html {
     --header-padding-vertical: 1rem;
     --header-padding-horizontal: 2rem;
     --title-font-size: 2rem;
-    --default-font-size: 1.5rem;
+    --default-font-size: 1.0rem;
 
     /* カラー */
     --link-color: #ccc;
@@ -202,13 +202,13 @@ nav a:focus {
    見出し
 ====================================== */
 h2 {
-    font-size: 2rem;
+    font-size: calc(var(--default-font-size) * 1.5);
     text-decoration: underline;
     margin-bottom: 1rem;
 }
 
 h3 {
-    font-size: 1.5rem;
+    font-size: calc(var(--default-font-size) * 1.25);
     margin-bottom: 0.75rem;
 }
 
