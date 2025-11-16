@@ -8,13 +8,24 @@ html {
     --default-font-size: 1rem;
     --link-color: #ccc;
     --link-hover-color: #009dff;
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --header-bg: #333;
+    --submenu-bg: #444;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-size: var(--default-font-size);
-    line-height: 1.6;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --header-bg: #1e1e1e;
+    --submenu-bg: #2a2a2a;
+    --link-color: #bbb;
+    --link-hover-color: #66c2ff;
 }
 
 /* ======================================
