@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const link = item.querySelector('a');
         let tooltipVisible = false;
 
-        // ツールチップを表示する関数
         function showTooltip() {
             if (currentTooltip) {
                 currentTooltip.remove();
@@ -90,14 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
             currentTooltip = tooltip;
             tooltipVisible = true;
 
-            // ツールチップ外クリックで閉じる処理
             function onClickOutside(e) {
                 if (!item.contains(e.target) && !tooltip.contains(e.target)) {
                     hideTooltip();
                     document.removeEventListener('click', onClickOutside);
                 }
             }
-            document.addEventListener('click', onClickOutside);
+            setTimeout(() => {
+                // ここでイベント登録。setTimeoutはクリックイベントの伝播を防ぐための工夫
+                document.addEventListener('click', onClickOutside);
+            }, 0);
         }
 
         function hideTooltip() {
@@ -111,9 +112,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // ワンクリックでツールチップ表示 or 非表示切り替え
         item.addEventListener('click', (e) => {
-            e.preventDefault(); // リンクの遷移を止める
+            e.preventDefault();
+            e.stopPropagation(); // これを追加して伝播を止める
+
             if (tooltipVisible) {
                 hideTooltip();
             } else {
@@ -121,10 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // ダブルクリックでリンク遷移
         item.addEventListener('dblclick', (e) => {
             e.preventDefault();
-            // リンクのhrefに遷移
+            e.stopPropagation(); // こちらも伝播を止める
+
             const href = link.getAttribute('href');
             if (href) {
                 window.location.href = href;
