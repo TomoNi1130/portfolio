@@ -1,13 +1,16 @@
-// ハンバーガーメニューの制御
+// ==============================================
+// 1. ハンバーガーメニューの開閉制御
+// ==============================================
 const menuToggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('nav');
 
+// ハンバーガーボタンをクリックしたらメニューの開閉
 menuToggle.addEventListener('click', () => {
     nav.classList.toggle('active');
     menuToggle.classList.toggle('active');
 });
 
-// メニュー内のリンクをクリックしたら閉じる
+// メニュー内のリンクをクリックしたらメニューを閉じる
 const navLinks = document.querySelectorAll('nav a');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
@@ -16,55 +19,112 @@ navLinks.forEach(link => {
     });
 });
 
-// ドロップダウンメニューの遅延制御
+// ==============================================
+// 2. ドロップダウンメニューの制御
+// ==============================================
 const navItem = document.querySelector('.nav-item');
 const aboutLink = navItem.querySelector('a');
 let hideTimeout;
 
-// PC表示での動作
+// PC表示(768px以上)での動作
 navItem.addEventListener('mouseenter', () => {
     if (window.innerWidth > 768) {
+        // 既存のタイムアウトをキャンセル
         clearTimeout(hideTimeout);
+        // サブメニューを表示
         navItem.classList.add('show-submenu');
     }
 });
 
 navItem.addEventListener('mouseleave', () => {
     if (window.innerWidth > 768) {
-        // 1秒後に閉じる（ミリ秒単位で調整可能）
+        // 1秒後にサブメニューを閉じる
         hideTimeout = setTimeout(() => {
             navItem.classList.remove('show-submenu');
         }, 1000);
     }
 });
 
-// モバイルでのドロップダウンメニュー制御
+// モバイル表示(768px以下)での動作
 aboutLink.addEventListener('click', (e) => {
     if (window.innerWidth <= 768) {
+        // リンク遷移を防ぎ、クリックでサブメニュー開閉
         e.preventDefault();
         navItem.classList.toggle('active');
     }
 });
 
+// ==============================================
+// 3. スキルアイテムのツールチップ機能
+// ==============================================
 document.addEventListener("DOMContentLoaded", () => {
+    // 現在表示中のツールチップとアイテムを管理
     let currentTooltip = null;
+    let currentItem = null;
 
+    /**
+     * ツールチップを非表示にする関数
+     */
+    function hideTooltip() {
+        if (currentTooltip) {
+            const tooltipToRemove = currentTooltip;
+            // 先に変数をクリアしてから削除
+            currentTooltip = null;
+            currentItem = null;
+            
+            // フェードアウト開始
+            tooltipToRemove.classList.remove("show");
+            
+            // アニメーション完了後に要素を削除
+            setTimeout(() => {
+                tooltipToRemove.remove();
+            }, 200);
+        }
+    }
+
+    /**
+     * 外側クリック時の処理
+     */
+    function onClickOutside(e) {
+        // クリック対象がアイテムでもツールチップでもない場合は閉じる
+        if (currentItem && 
+            !currentItem.contains(e.target) && 
+            currentTooltip && 
+            !currentTooltip.contains(e.target)) {
+            hideTooltip();
+        }
+    }
+
+    // ドキュメント全体でクリックを監視
+    document.addEventListener('click', onClickOutside);
+
+    /**
+     * スクロール時にツールチップを閉じる
+     */
+    window.addEventListener('scroll', hideTooltip, true);
+
+    /**
+     * 各スキルアイテムにイベントを設定
+     */
     document.querySelectorAll(".skill-item").forEach(item => {
         const link = item.querySelector('a');
-        let tooltipVisible = false;
 
+        /**
+         * ツールチップを表示する関数
+         */
         function showTooltip() {
-            if (currentTooltip) {
-                currentTooltip.remove();
-                currentTooltip = null;
-            }
+            // 既存のツールチップを閉じる
+            hideTooltip();
 
+            // データ属性から情報を取得
             const duration = item.dataset.duration || "";
             const description = item.dataset.description || "説明がありません。";
 
+            // ツールチップ要素を作成
             const tooltip = document.createElement("div");
             tooltip.className = "skill-tooltip";
 
+            // 期間表示(あれば)
             if (duration) {
                 const durationEl = document.createElement("div");
                 durationEl.className = "tooltip-duration";
@@ -72,60 +132,50 @@ document.addEventListener("DOMContentLoaded", () => {
                 tooltip.appendChild(durationEl);
             }
 
+            // 説明文
             const descEl = document.createElement("div");
             descEl.className = "tooltip-description";
             descEl.textContent = description;
             tooltip.appendChild(descEl);
 
+            // body に追加
             document.body.appendChild(tooltip);
 
+            // アイテムの下に配置
             const rect = item.getBoundingClientRect();
             tooltip.style.position = "fixed";
             tooltip.style.top = `${rect.bottom + 8}px`;
             tooltip.style.left = `${rect.left}px`;
 
+            // フェードイン
             setTimeout(() => tooltip.classList.add("show"), 10);
 
+            // 現在のツールチップとして記録
             currentTooltip = tooltip;
-            tooltipVisible = true;
-
-            function onClickOutside(e) {
-                if (!item.contains(e.target) && !tooltip.contains(e.target)) {
-                    hideTooltip();
-                    document.removeEventListener('click', onClickOutside);
-                }
-            }
-            setTimeout(() => {
-                // ここでイベント登録。setTimeoutはクリックイベントの伝播を防ぐための工夫
-                document.addEventListener('click', onClickOutside);
-            }, 0);
+            currentItem = item;
         }
 
-        function hideTooltip() {
-            if (currentTooltip) {
-                currentTooltip.classList.remove("show");
-                setTimeout(() => {
-                    currentTooltip?.remove();
-                    currentTooltip = null;
-                    tooltipVisible = false;
-                }, 200);
-            }
-        }
-
+        /**
+         * シングルクリック: ツールチップ表示/非表示
+         */
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // これを追加して伝播を止める
+            e.stopPropagation();
 
-            if (tooltipVisible) {
+            // 同じアイテムをクリックした場合は閉じる
+            if (currentTooltip && currentItem === item) {
                 hideTooltip();
             } else {
                 showTooltip();
             }
         });
 
+        /**
+         * ダブルクリック: リンク先に遷移
+         */
         item.addEventListener('dblclick', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // こちらも伝播を止める
+            e.stopPropagation();
 
             const href = link.getAttribute('href');
             if (href) {
