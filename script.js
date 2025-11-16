@@ -45,3 +45,88 @@ aboutLink.addEventListener('click', (e) => {
         navItem.classList.toggle('active');
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    let currentTooltip = null;
+    let hideTimeout = null;
+    let currentItem = null;
+
+    document.querySelectorAll(".skill-item").forEach(item => {
+
+        const clearHideTimeout = () => {
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+                hideTimeout = null;
+            }
+        };
+
+        const scheduleHideTooltip = () => {
+            clearHideTimeout();
+            hideTimeout = setTimeout(() => {
+                if (currentTooltip) {
+                    currentTooltip.classList.remove("show");
+                    setTimeout(() => {
+                        currentTooltip?.remove();
+                        currentTooltip = null;
+                        currentItem = null;
+                    }, 200);
+                }
+            }, 200); // 200ms後に消す
+        };
+
+        item.addEventListener("mouseenter", () => {
+            clearHideTimeout();
+
+            if (currentTooltip) {
+                currentTooltip.remove();
+                currentTooltip = null;
+            }
+
+            currentItem = item;
+
+            const duration = item.dataset.duration || "";
+            const description = item.dataset.description || "説明がありません。";
+
+            const tooltip = document.createElement("div");
+            tooltip.className = "skill-tooltip";
+
+            if (duration) {
+                const durationEl = document.createElement("div");
+                durationEl.className = "tooltip-duration";
+                durationEl.textContent = duration;
+                tooltip.appendChild(durationEl);
+            }
+
+            const descEl = document.createElement("div");
+            descEl.className = "tooltip-description";
+            descEl.textContent = description;
+            tooltip.appendChild(descEl);
+
+            document.body.appendChild(tooltip);
+
+            const rect = item.getBoundingClientRect();
+            tooltip.style.position = "fixed";
+            tooltip.style.top = `${rect.bottom + 8}px`;
+            tooltip.style.left = `${rect.left}px`;
+
+            setTimeout(() => tooltip.classList.add("show"), 10);
+
+            // ツールチップにマウスが入ったら消すタイマーをキャンセル
+            tooltip.addEventListener("mouseenter", () => {
+                clearHideTimeout();
+            });
+
+            // ツールチップからマウスが出たら消すタイマーをセット
+            tooltip.addEventListener("mouseleave", () => {
+                scheduleHideTooltip();
+            });
+
+            currentTooltip = tooltip;
+        });
+
+        item.addEventListener("mouseleave", () => {
+            // マウスがツールチップに移動する可能性があるため少し遅延させて判定
+            scheduleHideTooltip();
+        });
+    });
+});
