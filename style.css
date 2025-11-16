@@ -3,22 +3,51 @@ html {
 }
 
 :root {
+    /* 基本サイズ */
     --header-height: 4rem;
+    --header-padding-vertical: 1rem;
+    --header-padding-horizontal: 2rem;
     --title-font-size: 2rem;
     --default-font-size: 1rem;
+
+    /* カラー */
     --link-color: #ccc;
     --link-hover-color: #009dff;
     --bg-color: #ffffff;
     --text-color: #000000;
-    --header-bg: #333;
-    --submenu-bg: #444;
+    --header-bg: #333333;
+    --submenu-bg: #444444;
+
+    /* スキルアイテム */
+    --skill-item-width: 7.5rem;
+    /* 約120px */
+    --skill-item-padding: 0.75rem;
+    /* 12px */
+    --skill-item-border-radius: 0.625rem;
+    /* 10px */
+    --skill-item-border-color: #ccc;
+    --skill-item-hover-border-color: #555;
+
+    /* ツールチップ */
+    --tooltip-bg: #222222;
+    --tooltip-color: #ffffff;
+    --tooltip-max-width: 15.625rem;
+    /* 250px */
+
+    /* ハンバーガースパン */
+    --burger-span-width: 1.5625rem;
+    /* 25px */
+    --burger-span-height: 0.1875rem;
+    /* 3px */
+    --burger-span-gap: 0.3125rem;
+    /* 5px */
+
+    /* レスポンシブ */
+    --nav-width-mobile: 15.625rem;
+    /* 250px */
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-
+/* ダークモードは変数のみ切り替え */
 body.dark-mode {
     --bg-color: #121212;
     --text-color: #e0e0e0;
@@ -26,6 +55,20 @@ body.dark-mode {
     --submenu-bg: #2a2a2a;
     --link-color: #bbb;
     --link-hover-color: #66c2ff;
+}
+
+/* ======================================
+   全体設定
+====================================== */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: var(--default-font-size);
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 /* ======================================
@@ -38,9 +81,9 @@ header {
     width: 100%;
     height: var(--header-height);
 
-    padding: 1rem 2rem;
-    background-color: #333;
-    color: white;
+    padding: var(--header-padding-vertical) var(--header-padding-horizontal);
+    background-color: var(--header-bg);
+    color: var(--text-color);
     font-size: var(--title-font-size);
 
     display: flex;
@@ -62,19 +105,21 @@ header {
     border: none;
     cursor: pointer;
 
-    padding: 5px;
-    gap: 5px;
+    padding: 0;
+    gap: var(--burger-span-gap);
 }
 
 .menu-toggle span {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    transition: all 0.3s;
+    width: var(--burger-span-width);
+    height: var(--burger-span-height);
+    background-color: var(--text-color);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    border-radius: 1px;
 }
 
 .menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
+    transform: rotate(45deg) translate(0.4375rem, 0.4375rem);
+    /* 7px = 0.4375rem */
 }
 
 .menu-toggle.active span:nth-child(2) {
@@ -82,7 +127,7 @@ header {
 }
 
 .menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
+    transform: rotate(-45deg) translate(0.4375rem, -0.4375rem);
 }
 
 /* ======================================
@@ -101,11 +146,13 @@ nav {
 nav a {
     color: var(--link-color);
     text-decoration: none;
-    transition: color 0.3s;
+    transition: color 0.3s ease;
 }
 
-nav a:hover {
+nav a:hover,
+nav a:focus {
     color: var(--link-hover-color);
+    outline: none;
 }
 
 /* ▼ サブメニュー */
@@ -115,33 +162,39 @@ nav a:hover {
     top: 100%;
     left: 0;
 
-    min-width: 150px;
+    min-width: 9.375rem;
+    /* 150px */
     padding: 0.5rem 0;
     margin-top: 0.5rem;
 
-    background-color: #444;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    background-color: var(--submenu-bg);
+    border-radius: 0.25rem;
+    /* 4px */
+    box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.3);
 
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .submenu a {
     display: block;
     padding: 0.75rem 1.5rem;
     color: var(--link-color);
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.submenu a:hover {
-    background-color: #555;
+.submenu a:hover,
+.submenu a:focus {
+    background-color: #555555;
     color: var(--link-hover-color);
+    outline: none;
 }
 
 .nav-item.show-submenu .submenu {
     display: block;
     opacity: 1;
+    pointer-events: auto;
 }
 
 /* ======================================
@@ -150,10 +203,12 @@ nav a:hover {
 h2 {
     font-size: 2rem;
     text-decoration: underline;
+    margin-bottom: 1rem;
 }
 
 h3 {
     font-size: 1.5rem;
+    margin-bottom: 0.75rem;
 }
 
 /* ======================================
@@ -162,6 +217,9 @@ h3 {
 main {
     margin-top: var(--header-height);
     padding: 2rem;
+    max-width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 section {
@@ -174,48 +232,56 @@ section {
 .skill-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 1rem;
     justify-content: center;
+    padding: 0 0.5rem;
 }
 
 .skill-item {
-    width: 120px;
-    padding: 12px;
+    width: var(--skill-item-width);
+    padding: var(--skill-item-padding);
 
-    background: #fff;
-    border: 2px solid #ccc;
-    border-radius: 10px;
+    background: var(--bg-color);
+    border: 2px solid var(--skill-item-border-color);
+    border-radius: var(--skill-item-border-radius);
 
     text-align: center;
-    transition: 0.2s;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    cursor: default;
 }
 
-.skill-item:hover {
-    border-color: #555;
-    transform: translateY(-3px);
+.skill-item:hover,
+.skill-item:focus-within {
+    border-color: var(--skill-item-hover-border-color);
+    transform: translateY(-0.1875rem);
+    /* 3px */
+    outline: none;
 }
 
 .skill-item img {
-    max-width: 60px;
-    max-height: 60px;
+    max-width: 3.75rem;
+    /* 60px */
+    max-height: 3.75rem;
     object-fit: contain;
 
-    background-color: white;
-    padding: 4px;
-    border-radius: 4px;
+    background-color: var(--bg-color);
+    padding: 0.25rem;
+    /* 4px */
+    border-radius: 0.25rem;
 }
 
 .skill-item span {
     font-size: 0.9rem;
     font-weight: 900;
-    text-align: center;
+    display: block;
+    margin-top: 0.5rem;
 }
 
+/* スキルリンク全体をクリック可能に */
 .skill-item a {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     width: 100%;
     height: 100%;
 
@@ -225,19 +291,22 @@ section {
 
 /* ▼ ツールチップ */
 .skill-tooltip {
-    background: #222;
-    color: white;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-color);
     padding: 0.5em 1em;
-    border-radius: 4px;
-    max-width: 250px;
+    border-radius: 0.25rem;
+    max-width: var(--tooltip-max-width);
     opacity: 0;
     transition: opacity 0.2s ease;
     position: absolute;
     z-index: 100;
+    pointer-events: none;
+    box-sizing: border-box;
 }
 
 .skill-tooltip.show {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .tooltip-duration {
@@ -253,7 +322,8 @@ section {
 /* ======================================
    レスポンシブ（768px以下）
 ====================================== */
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
+    /* 768px */
 
     /* ▼ ハンバーガー表示 */
     .menu-toggle {
@@ -265,16 +335,18 @@ section {
         top: var(--header-height);
         right: -100%;
 
-        width: 250px;
+        width: var(--nav-width-mobile);
         height: calc(100vh - var(--header-height));
 
-        background-color: #333;
+        background-color: var(--header-bg);
         flex-direction: column;
-        padding: 2rem;
+        padding: 2rem 1.5rem;
         gap: 1rem;
         align-items: flex-start;
 
-        transition: right 0.3s;
+        transition: right 0.3s ease;
+        box-sizing: border-box;
+        overflow-y: auto;
     }
 
     nav.active {
@@ -283,8 +355,9 @@ section {
 
     nav a {
         width: 100%;
-        padding: 1rem;
-        border-bottom: 1px solid #555;
+        padding: 1rem 0;
+        border-bottom: 1px solid #555555;
+        box-sizing: border-box;
     }
 
     .nav-item {
@@ -298,8 +371,10 @@ section {
         margin-left: 1rem;
         margin-top: 0;
 
-        background-color: #555;
+        background-color: #555555;
         box-shadow: none;
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .nav-item.active .submenu {
@@ -307,7 +382,7 @@ section {
     }
 
     header {
-        padding: 1rem;
+        padding: var(--header-padding-vertical) 1rem;
     }
 
     main {
