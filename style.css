@@ -15,6 +15,7 @@ html {
     --link-hover-color: #009dff;
     --bg-color: #ffffff;
     --text-color: #000000;
+    --header-color: #ffffff;
     --header-bg: #333333;
     --submenu-bg: #444444;
 
@@ -83,7 +84,7 @@ header {
 
     padding: var(--header-padding-vertical) var(--header-padding-horizontal);
     background-color: var(--header-bg);
-    color: var(--text-color);
+    color: var(--header-color);
     font-size: var(--title-font-size);
 
     display: flex;
