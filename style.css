@@ -48,6 +48,35 @@ html {
     /* 250px */
 }
 
+#works,
+#profile,
+#about,
+#contact {
+    text-align: center;
+}
+
+section {
+    width: 100vw;
+    /* ビューポート幅いっぱい */
+    padding: 2rem 1rem;
+    /* 適度な余白 */
+    box-sizing: border-box;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+}
+
+/* 奇数番目のセクションを白背景 */
+section:nth-of-type(odd) {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* 偶数番目のセクションを薄い灰色背景 */
+section:nth-of-type(even) {
+    background-color: #f0f0f0;
+    color: #333333;
+}
+
 /* ダークモードは変数のみ切り替え */
 body.dark-mode {
     --bg-color: #121212;
@@ -393,9 +422,12 @@ section {
 
 .work-list {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
     justify-content: center;
+    /* 横方向の中央揃え */
+    flex-wrap: wrap;
+    /* 折り返し許可 */
+    gap: 1rem;
+    /* アイテム間の隙間 */
 }
 
 .work-item {
@@ -413,4 +445,36 @@ section {
     border-radius: 8px;
     display: block;
     margin: 0 auto 0.5rem;
+}
+
+.career-heading {
+    display: flex;
+    align-items: center;
+    /* 縦方向中央揃え */
+    gap: 0.5rem;
+    /* 見出しとアイコンの間隔 */
+    justify-content: center;
+    /* 横方向中央揃え */
+}
+
+.career-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.career-content {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+img.jaga-icon {
+    display: block;
+    /* ブロック要素にする */
+    width: 15rem;
+    /* 横幅固定 */
+    height: auto;
+    /* 縦横比維持 */
+    margin: 0 auto;
+    /* 左右のマージン自動で中央寄せ */
 }
