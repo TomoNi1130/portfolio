@@ -217,7 +217,29 @@ imgs.forEach(img => {
   setRandomPosition(img);
 
   img.addEventListener("click", function () {
-      this.style.transform = "translateY(200vh) rotate(180deg)";
-      this.classList.add("cat-falling");
+      // 現在のtransformの値を取得
+      const computedStyle = window.getComputedStyle(this);
+      const currentTransform = computedStyle.transform;
+      
+      // transformMatrixからscaleXの値を抽出
+      let scaleX = 1;
+      if (currentTransform && currentTransform !== 'none') {
+        const matrix = currentTransform.match(/matrix\(([^)]+)\)/);
+        if (matrix) {
+          const values = matrix[1].split(',').map(parseFloat);
+          scaleX = values[0]; // matrix(a, b, c, d, tx, ty)のa値がscaleX
+        }
+      }
+      
+      // まず上に飛び上がる
+      this.style.transition = "transform 0.3s ease-out";
+      this.style.transform = `translateY(-15vh) rotate(-30deg) scaleX(${scaleX})`;
+      
+      // 0.3秒後に落下開始
+      setTimeout(() => {
+        this.style.transition = "transform 2.0s cubic-bezier(0.2, 0.0, 0.2, 0.98)";
+        this.style.transform = `translateY(200vh) rotate(540deg) scaleX(${scaleX})`;
+        this.classList.add("cat-falling");
+      }, 300);
     });
 });

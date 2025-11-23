@@ -359,7 +359,6 @@ img.jaga-icon {
 
 .cat-falling {
     transition: transform 2.0s cubic-bezier(0.2, 0.0, 0.2, 0.98);
-
 }
 
 .flip-horizontal {
