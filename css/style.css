@@ -305,14 +305,17 @@ main {
     min-width: 180px;
     box-sizing: border-box;
     text-align: center;
+    object-fit: cover
 }
 
 .work-item img {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 200px;
     border-radius: 8px;
     display: block;
     margin: 0 auto 0.5rem;
+    object-fit: contain;
+    background-color: var(--bg-color);
 }
 
 /* キャリア見出し */
@@ -340,6 +343,27 @@ img.jaga-icon {
     width: clamp(10rem, 30vw, 15rem);
     height: auto;
     margin: 0 auto;
+}
+
+.fly-cat {
+    position: fixed;
+    z-index: 100;
+    cursor: pointer;
+    transform: none;
+    transform: scaleX(1) rotate(15deg);
+}
+
+.fly-cat img {
+    width: 15vw;
+}
+
+.cat-falling {
+    transition: transform 2.0s cubic-bezier(0.2, 0.0, 0.2, 0.98);
+
+}
+
+.flip-horizontal {
+    transform: scaleX(-1) rotate(15deg);
 }
 
 /* レスポンシブ（768px以下） */

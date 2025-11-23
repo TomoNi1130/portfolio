@@ -184,3 +184,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+//猫を毎回ランダムな場所に置く
+
+function setRandomPosition(el) {
+  const maxTop = 80;
+  const minTop = 20;
+  const maxRight = 80;
+  const minRight = 20;
+
+  const top = Math.random() * (maxTop - minTop) + minTop;
+
+  const isRight = Math.random() >= 0.5;
+  let right;
+  if (isRight) {
+    // 右側（70〜）
+    right = Math.random() * (maxRight - 70) + 70;
+    el.classList.add("flip-horizontal"); // 右側なら反転
+  } else {
+    // 左側（〜30）
+    right = Math.random() * (30 - minRight) + minRight;
+    el.classList.remove("flip-horizontal"); // 左側なら反転解除
+  }
+
+  el.style.top = top + "vh";
+  el.style.right = right + "vw";
+}
+
+const imgs = document.querySelectorAll(".fly-cat");
+
+imgs.forEach(img => {
+  setRandomPosition(img);
+
+  img.addEventListener("click", function () {
+      this.style.transform = "translateY(200vh) rotate(180deg)";
+      this.classList.add("cat-falling");
+    });
+});
