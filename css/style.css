@@ -224,7 +224,7 @@ main {
     border-radius: var(--skill-item-border-radius);
     text-align: center;
     transition: border-color 0.2s ease, transform 0.2s ease;
-    cursor: default;
+    cursor: pointer;
 }
 
 .skill-item:hover,
@@ -259,9 +259,10 @@ main {
     height: 100%;
     text-decoration: none;
     color: inherit;
+    pointer-events: none;
 }
 
-/* ツールチップ */
+/* スキルツールチップ */
 .skill-tooltip {
     background: var(--tooltip-bg);
     color: var(--tooltip-color);
@@ -305,7 +306,12 @@ main {
     min-width: 180px;
     box-sizing: border-box;
     text-align: center;
-    object-fit: cover
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.work-item:hover {
+    transform: translateY(-0.1875rem);
 }
 
 .work-item img {
@@ -316,6 +322,71 @@ main {
     margin: 0 auto 0.5rem;
     object-fit: contain;
     background-color: var(--bg-color);
+}
+
+.work-item p {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+/* Workツールチップ */
+.work-tooltip {
+    background: var(--tooltip-bg);
+    color: var(--tooltip-color);
+    padding: 1em 1.25em;
+    border-radius: 0.5rem;
+    max-width: 35rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    position: fixed;
+    z-index: 100;
+    pointer-events: none;
+    box-sizing: border-box;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+}
+
+.work-tooltip.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.work-tooltip .tooltip-description {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 0.75em;
+    line-height: 1.4;
+}
+
+.work-tooltip .tooltip-images {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 0.75em;
+}
+
+.work-tooltip .tooltip-image {
+    flex: 1 1 calc(50% - 0.25rem);
+    max-width: calc(50% - 0.25rem);
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 画像が1つだけの場合は全幅表示 */
+.work-tooltip .tooltip-images:has(.tooltip-image:only-child) .tooltip-image {
+    flex: 1 1 100%;
+    max-width: 100%;
+}
+
+.work-tooltip .tooltip-hint {
+    font-size: 0.85em;
+    color: #aaa;
+    font-style: italic;
+    margin-top: 0.5em;
+    border-top: 1px solid #444;
+    padding-top: 0.5em;
 }
 
 /* キャリア見出し */
@@ -435,7 +506,6 @@ img.jaga-icon {
     .work-item {
         flex-basis: 100%;
         max-width: 400px;
-        /* 最大幅を制限 */
         margin-left: auto;
         margin-right: auto;
     }
@@ -447,8 +517,6 @@ img.jaga-icon {
         display: block;
         margin: 0 auto 0.5rem;
         max-height: 250px;
-        /* 画像の高さも制限可能 */
         object-fit: contain;
-        /* 必要に応じて画像の切り抜き防止 */
     }
 }

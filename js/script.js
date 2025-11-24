@@ -183,6 +183,112 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    // ==============================================
+    // 4. Workアイテムのツールチップ機能
+    // ==============================================
+    /**
+     * 各Workアイテムにイベントを設定
+     */
+    document.querySelectorAll(".work-item").forEach(item => {
+        const link = item.dataset.link;
+        const description = item.querySelector('p')?.textContent || "作品の説明";
+        const tooltipImageSrc = item.dataset.tooltipImage;
+
+        /**
+         * Workツールチップを表示する関数
+         */
+        function showWorkTooltip() {
+            // 既存のツールチップを閉じる
+            hideTooltip();
+
+            // ツールチップ要素を作成
+            const tooltip = document.createElement("div");
+            tooltip.className = "work-tooltip";
+
+            // 説明文
+            const descEl = document.createElement("div");
+            descEl.className = "tooltip-description";
+            descEl.textContent = description;
+            tooltip.appendChild(descEl);
+
+            // ツールチップ用画像を追加（複数対応）
+            if (tooltipImageSrc) {
+                // カンマ区切りで分割
+                const imagePaths = tooltipImageSrc.split(',').map(path => path.trim());
+                
+                // 画像コンテナを作成
+                const imageContainer = document.createElement("div");
+                imageContainer.className = "tooltip-images";
+                
+                // 各画像を追加
+                imagePaths.forEach(imagePath => {
+                    if (imagePath) {
+                        const tooltipImg = document.createElement("img");
+                        tooltipImg.src = imagePath;
+                        tooltipImg.alt = description;
+                        tooltipImg.className = "tooltip-image";
+                        imageContainer.appendChild(tooltipImg);
+                    }
+                });
+                
+                tooltip.appendChild(imageContainer);
+            }
+
+            // リンクがある場合はヒントを表示
+            if (link) {
+                const hintEl = document.createElement("div");
+                hintEl.className = "tooltip-hint";
+                hintEl.textContent = "ダブルクリックで詳細を開く";
+                tooltip.appendChild(hintEl);
+            }
+
+            // body に追加
+            document.body.appendChild(tooltip);
+
+            // アイテムの上に配置
+            const rect = item.getBoundingClientRect();
+            const tooltipHeight = tooltip.offsetHeight || 200; // 実際の高さを取得
+            tooltip.style.position = "fixed";
+            tooltip.style.top = `${rect.top - tooltipHeight - 8}px`;
+            tooltip.style.left = `${rect.left + rect.width / 2}px`;
+            tooltip.style.transform = "translateX(-50%)";
+
+            // フェードイン
+            setTimeout(() => tooltip.classList.add("show"), 10);
+
+            // 現在のツールチップとして記録
+            currentTooltip = tooltip;
+            currentItem = item;
+        }
+
+        /**
+         * シングルクリック: ツールチップ表示/非表示
+         */
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // 同じアイテムをクリックした場合は閉じる
+            if (currentTooltip && currentItem === item) {
+                hideTooltip();
+            } else {
+                showWorkTooltip();
+            }
+        });
+
+        /**
+         * ダブルクリック: リンク先に遷移
+         */
+        item.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (link) {
+                window.open(link, '_blank');
+            }
+        });
+    });
 });
 
 //猫を毎回ランダムな場所に置く
