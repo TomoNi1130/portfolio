@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${data.title} | 西堀 友喜 Portfolio`} description={data.description}>
+  <article class="project-detail">
+    <a href="/#works">← 作品一覧へ</a>
+    <h1>{data.title}</h1>
+    <p>{data.description}</p>
+
+    {(data.period || data.role || data.technologies.length > 0) && (
+      <dl class="project-meta">
+        {data.period && <div><dt>制作期間</dt><dd>{data.period}</dd></div>}
+        {data.role && <div><dt>担当</dt><dd>{data.role}</dd></div>}
+        {data.technologies.length > 0 && (
+          <div><dt>使用技術</dt><dd>{data.technologies.join(' / ')}</dd></div>
+        )}
+      </dl>
+    )}
+
+    {data.url && <p><a href={data.url}>関連リンクを開く</a></p>}
+    {data.cover && <img class="project-cover" src={data.cover} alt={data.coverAlt ?? data.title} />}
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

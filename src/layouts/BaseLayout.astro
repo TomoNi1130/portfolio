@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = '西堀 友喜 Portfolio',
+  description = '西堀友喜の制作物や活動の記録をまとめたポートフォリオ。',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <header>
+        <strong>Nishihori Tomoki / 西堀 友喜</strong>
+        <button class="menu-toggle" aria-label="メニュー" aria-expanded="false" aria-controls="site-navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav id="site-navigation">
+            <a href="/#profile">Profile</a>
+            <a href="/#works">Works</a>
+            <div class="nav-item">
+                <a href="/#about">About</a>
+                <div class="submenu">
+                    <a href="/#skill">Skill</a>
+                    <a href="/#career">career</a>
+                </div>
+            </div>
+            <a href="/#contact">Contact</a>
+        </nav>
+    </header>
+    <main id="main-content">
+      <slot />
+    </main>
+    <script is:inline src="/js/script.js" defer></script>
+  </body>
+</html>
