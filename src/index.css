@@ -1,33 +1,24 @@
-:root {
-  font-family: system-ui, sans-serif;
-  line-height: 1.8;
-  color: #222;
-  background: #fff;
-  color-scheme: light;
-  font-synthesis: none;
-  overflow-wrap: anywhere;
-}
+@import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  :root {
+    font-family: system-ui, sans-serif;
+    line-height: 1.8;
+    color: #222;
+    background: #fff;
+    color-scheme: light;
+    font-synthesis: none;
+    overflow-wrap: anywhere;
+  }
 
-body {
-  margin: 0;
-}
+  a {
+    color: #245a9c;
+    text-decoration-line: underline;
+    text-underline-offset: 0.2em;
+  }
 
-a {
-  color: #245a9c;
-  text-underline-offset: 0.2em;
-}
-
-a:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+  a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
 }
